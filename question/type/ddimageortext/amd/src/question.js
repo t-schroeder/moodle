@@ -493,6 +493,15 @@ define([
                 }
             }
         }
+        if (drag.hasClass('unplaced')) {
+            var origin = {x: e.offsetX, y: e.offsetY};
+            if (e.targetTouches !== undefined) {
+                var bcr = drag[0].getBoundingClientRect();
+                origin.x = e.targetTouches[0].clientX - bcr.x;
+                origin.y = e.targetTouches[0].clientY - bcr.y;
+            }
+            thisQ.handleElementScale(drag, origin.x + 'px ' + origin.y + 'px');
+        }
 
         dragDrop.start(e, drag, function(x, y, drag) {
             thisQ.dragMove(x, y, drag);
@@ -762,18 +771,29 @@ define([
      */
     DragDropOntoImageQuestion.prototype.animateTo = function(drag, target) {
         var currentPos = drag.offset(),
+            currentBcr = drag[0].getBoundingClientRect(),
             targetPos = target.offset(),
+            targetBcr = target[0].getBoundingClientRect(),
             thisQ = this;
+        var currentCenterPos = {
+            left: currentPos.left + (0.5 * currentBcr.width),
+            top: currentPos.top + (0.5 * currentBcr.height)
+        };
+        var targetCenterPos = {
+            left: targetPos.left + (0.5 * targetBcr.width),
+            top: targetPos.top + (0.5 * targetBcr.height)
+        };
 
         M.util.js_pending('qtype_ddimageortext-animate-' + thisQ.containerId);
         // Animate works in terms of CSS position, whereas locating an object
         // on the page works best with jQuery offset() function. So, to get
         // the right target position, we work out the required change in
-        // offset() and then add that to the current CSS position.
+        // offset() between the centers and then add that to the current CSS
+        // position.
         drag.animate(
             {
-                left: parseInt(drag.css('left')) + targetPos.left - currentPos.left,
-                top: parseInt(drag.css('top')) + targetPos.top - currentPos.top
+                left: parseInt(drag.css('left')) + targetCenterPos.left - currentCenterPos.left,
+                top: parseInt(drag.css('top')) + targetCenterPos.top - currentCenterPos.top
             },
             {
                 duration: 'fast',
@@ -795,12 +815,9 @@ define([
      */
     DragDropOntoImageQuestion.prototype.isPointInDrop = function(pageX, pageY, drop) {
         var position = drop.offset();
-        if (drop.hasClass('draghome')) {
-            return pageX >= position.left && pageX < position.left + drop.outerWidth()
-                && pageY >= position.top && pageY < position.top + drop.outerHeight();
-        }
-        return pageX >= position.left && pageX < position.left + drop.width()
-            && pageY >= position.top && pageY < position.top + drop.height();
+        var bcr = drop[0].getBoundingClientRect();
+        return pageX >= position.left && pageX < position.left + bcr.width
+            && pageY >= position.top && pageY < position.top + bcr.height;
     };
 
     /**
