@@ -1626,6 +1626,7 @@ class cm_info implements IteratorAggregate {
      *   intended to be linked to from 'normal' parts of the interface; this is what label does).
      */
     public function has_view() {
+        $this->obtain_dynamic_data();
         return !is_null($this->url);
     }
 
