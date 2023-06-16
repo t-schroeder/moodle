@@ -43,6 +43,11 @@ class statistics_bulk_loader {
      * @return float[][] if a value is not available, it will be set to null.
      */
     public static function load_aggregate_statistics(array $questionids, array $requiredstatistics): array {
+        // Return early if there's no required statistics.
+        if (empty($requiredstatistics)) {
+            return array_combine($questionids, array_fill(0, count($questionids), []));
+        }
+
         $places = self::get_all_places_where_questions_were_attempted($questionids);
 
         // Set up blank two-dimensional arrays to store the running totals. Indexed by questionid and field name.
