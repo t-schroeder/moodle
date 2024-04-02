@@ -55,6 +55,9 @@ abstract class info {
     /** @var array|null Array of information about current restore if any */
     protected static $restoreinfo = null;
 
+    /** @var array Keep cache of capability_checker objects. */
+    protected static $capabilitycheckercache = [];
+
     /**
      * Constructs with item details.
      *
@@ -637,7 +640,14 @@ abstract class info {
             return $users;
         }
         $tree = $this->get_availability_tree();
-        $checker = new capability_checker($this->get_context());
+        $context = $this->get_context();
+
+        // Cache capability_checkers object so the caches they themselves keep
+        // isn't wasted.
+        if (!array_key_exists($context->id, self::$capabilitycheckercache)) {
+            self::$capabilitycheckercache[$context->id] = new capability_checker($context);
+        }
+        $checker = self::$capabilitycheckercache[$context->id];
 
         // Filter using availability tree.
         $this->modinfo = get_fast_modinfo($this->get_course());
@@ -829,5 +839,22 @@ abstract class info {
             return [];
         }
         return $allgroups[$groupingid];
+    }
+
+    /**
+     * Clears the cached capability checker(s).
+     * 
+     * This should only be necessary when changing capabilities mid-pageload.
+     * It is necessary in certain unit tests.
+     *
+     * @param int $contextid Context ID or null (default) for all contexts
+     * @return void
+     */
+    public static function reset_caches(?int $contextid = null): void {
+        if ($contextid) {
+            unset(self::$capabilitycheckercache[$contextid]);
+        } else {
+            self::$capabilitycheckercache = [];
+        }
     }
 }
