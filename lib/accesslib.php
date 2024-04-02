@@ -4987,6 +4987,7 @@ function prohibit_is_removable($roleid, context $context, $capability) {
  */
 function role_change_permission($roleid, $context, $capname, $permission) {
     global $DB;
+    \core_availability\info::reset_caches($context->id);
 
     if ($permission == CAP_INHERIT) {
         unassign_capability($capname, $roleid, $context->id);
