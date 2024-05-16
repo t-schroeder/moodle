@@ -2854,7 +2854,7 @@ function lti_update_type($type, $config) {
             $sql = "SELECT cm.id, cm.course
                       FROM {course_modules} cm
                       JOIN {modules} m ON cm.module = m.id
-                      JOIN {lti} l ON l.course = cm.course
+                      JOIN {lti} l ON cm.instance = l.id
                      WHERE m.name = :name AND l.typeid = :typeid";
 
             $rs = $DB->get_recordset_sql($sql, ['name' => 'lti', 'typeid' => $type->id]);
