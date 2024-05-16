@@ -2373,8 +2373,8 @@ function lti_get_configured_types($courseid, $sectionreturn = 0) {
 
         $iconurl = get_tool_type_icon_url($ltitype);
         $iconclass = '';
-        if ($iconurl !== $OUTPUT->image_url('monologo', 'lti')->out()) {
-            // Do not filter the icon if it is not the default LTI activity icon.
+        if ($iconurl !== $OUTPUT->image_url('monologo', 'lti')->out() && !(new moodle_url($iconurl))->get_param('filtericon')) {
+            // Do not filter the icon if it is not the default LTI activity icon and doesn't contain the `filtericon` parameter.
             $iconclass = 'nofilter';
         }
         $type->icon = html_writer::empty_tag('img', ['src' => $iconurl, 'alt' => '', 'class' => "icon $iconclass"]);
