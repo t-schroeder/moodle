@@ -167,18 +167,24 @@ class async_helper  {
     public function send_message() {
         global $USER;
 
+        $oldforcelang = force_current_language($this->user->lang);
+
         $subjectraw = get_config('backup', 'backup_async_message_subject');
+        $subjectformatted = format_string($subjectraw);
         $subjecttext = preg_replace_callback(
                 '/\{([-_A-Za-z0-9]+)\}/u',
                 array('async_helper', 'lookup_message_variables'),
-                $subjectraw);
+                $subjectformatted);
 
         $messageraw = get_config('backup', 'backup_async_message');
+        $messageformatted = format_text($messageraw);
         $messagehtml = preg_replace_callback(
                 '/\{([-_A-Za-z0-9]+)\}/u',
                 array('async_helper', 'lookup_message_variables'),
-                $messageraw);
+                $messageformatted);
         $messagetext = html_to_text($messagehtml);
+
+        force_current_language($oldforcelang);
 
         $message = new \core\message\message();
         $message->component = 'moodle';
