@@ -26413,32 +26413,32 @@ img.icon {
 
 .activityiconcontainer.administration:not(.isbranded) .activityicon:not(.nofilter),
 .activityiconcontainer.administration:not(.isbranded) .icon:not(.nofilter) {
-  filter: invert(45%) sepia(46%) saturate(3819%) hue-rotate(260deg) brightness(101%) contrast(87%);
+  filter: brightness(0) saturate(100%) invert(45%) sepia(46%) saturate(3819%) hue-rotate(260deg) brightness(101%) contrast(87%);
 }
 
 .activityiconcontainer.assessment:not(.isbranded) .activityicon:not(.nofilter),
 .activityiconcontainer.assessment:not(.isbranded) .icon:not(.nofilter) {
-  filter: invert(36%) sepia(98%) saturate(6969%) hue-rotate(315deg) brightness(90%) contrast(119%);
+  filter: brightness(0) saturate(100%) invert(36%) sepia(98%) saturate(6969%) hue-rotate(315deg) brightness(90%) contrast(119%);
 }
 
 .activityiconcontainer.collaboration:not(.isbranded) .activityicon:not(.nofilter),
 .activityiconcontainer.collaboration:not(.isbranded) .icon:not(.nofilter) {
-  filter: invert(25%) sepia(54%) saturate(6226%) hue-rotate(245deg) brightness(100%) contrast(102%);
+  filter: brightness(0) saturate(100%) invert(25%) sepia(54%) saturate(6226%) hue-rotate(245deg) brightness(100%) contrast(102%);
 }
 
 .activityiconcontainer.communication:not(.isbranded) .activityicon:not(.nofilter),
 .activityiconcontainer.communication:not(.isbranded) .icon:not(.nofilter) {
-  filter: invert(48%) sepia(74%) saturate(4887%) hue-rotate(11deg) brightness(102%) contrast(101%);
+  filter: brightness(0) saturate(100%) invert(48%) sepia(74%) saturate(4887%) hue-rotate(11deg) brightness(102%) contrast(101%);
 }
 
 .activityiconcontainer.content:not(.isbranded) .activityicon:not(.nofilter),
 .activityiconcontainer.content:not(.isbranded) .icon:not(.nofilter) {
-  filter: invert(49%) sepia(52%) saturate(4675%) hue-rotate(156deg) brightness(89%) contrast(102%);
+  filter: brightness(0) saturate(100%) invert(49%) sepia(52%) saturate(4675%) hue-rotate(156deg) brightness(89%) contrast(102%);
 }
 
 .activityiconcontainer.interactivecontent:not(.isbranded) .activityicon:not(.nofilter),
 .activityiconcontainer.interactivecontent:not(.isbranded) .icon:not(.nofilter) {
-  filter: invert(25%) sepia(63%) saturate(1152%) hue-rotate(344deg) brightness(94%) contrast(91%);
+  filter: brightness(0) saturate(100%) invert(25%) sepia(63%) saturate(1152%) hue-rotate(344deg) brightness(94%) contrast(91%);
 }
 
 .icon-box {
@@ -26478,12 +26478,12 @@ img.icon {
 }
 
 :root {
-  --activityadministration: invert(45%) sepia(46%) saturate(3819%) hue-rotate(260deg) brightness(101%) contrast(87%);
-  --activityassessment: invert(36%) sepia(98%) saturate(6969%) hue-rotate(315deg) brightness(90%) contrast(119%);
-  --activitycollaboration: invert(25%) sepia(54%) saturate(6226%) hue-rotate(245deg) brightness(100%) contrast(102%);
-  --activitycommunication: invert(48%) sepia(74%) saturate(4887%) hue-rotate(11deg) brightness(102%) contrast(101%);
-  --activitycontent: invert(49%) sepia(52%) saturate(4675%) hue-rotate(156deg) brightness(89%) contrast(102%);
-  --activityinteractivecontent: invert(25%) sepia(63%) saturate(1152%) hue-rotate(344deg) brightness(94%) contrast(91%);
+  --activityadministration: brightness(0) saturate(100%) invert(45%) sepia(46%) saturate(3819%) hue-rotate(260deg) brightness(101%) contrast(87%);
+  --activityassessment: brightness(0) saturate(100%) invert(36%) sepia(98%) saturate(6969%) hue-rotate(315deg) brightness(90%) contrast(119%);
+  --activitycollaboration: brightness(0) saturate(100%) invert(25%) sepia(54%) saturate(6226%) hue-rotate(245deg) brightness(100%) contrast(102%);
+  --activitycommunication: brightness(0) saturate(100%) invert(48%) sepia(74%) saturate(4887%) hue-rotate(11deg) brightness(102%) contrast(101%);
+  --activitycontent: brightness(0) saturate(100%) invert(49%) sepia(52%) saturate(4675%) hue-rotate(156deg) brightness(89%) contrast(102%);
+  --activityinteractivecontent: brightness(0) saturate(100%) invert(25%) sepia(63%) saturate(1152%) hue-rotate(344deg) brightness(94%) contrast(91%);
 }
 
 /* admin.less */
