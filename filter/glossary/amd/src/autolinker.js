@@ -71,7 +71,8 @@ const showGlossaryEntry = async(entryId) => {
         isVerticallyCentered: true,
         buttons: {
             cancel: await getString('ok')
-        }
+        },
+        large: true
     });
     // Execute the JS code returned from the template once the modal is created.
     Templates.runTemplateJS(js);
