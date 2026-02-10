@@ -70,6 +70,28 @@ class behat_download extends behat_base {
     }
 
     /**
+     * Downloads the file from a link on the page and verify the default filename.
+     *
+     * @Then following :link_text should download a file whose default name matches ":default_filename_pattern"
+     *
+     * @param string $linktext the text of the link.
+     * @param string $defaultfilenamepattern a regular expression to match the default filename against (see Content-Disposition
+     *                                       HTTP header).
+     * @throws ExpectationException if the file cannot be downloaded, or if the download does not pass the filename check.
+     */
+    public function following_in_element_should_download_a_file_with_name(string $linktext, string $defaultfilenamepattern): void {
+
+        $defaultfilename = behat_context_helper::get('behat_general')->download_file_get_default_name($linktext, '', '');
+        if (preg_match($defaultfilenamepattern, $defaultfilename) !== 1) {
+            throw new ExpectationException(
+                "The file downloaded should have a default name matching the regex $defaultfilenamepattern, " .
+                "but has the default name $defaultfilename instead.",
+                $this->getSession(),
+            );
+        }
+    }
+
+    /**
      * Download a file from the given link.
      *
      * @param string $linktext the text of the link.
