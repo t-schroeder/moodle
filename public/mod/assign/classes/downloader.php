@@ -279,7 +279,10 @@ class downloader {
             $this->instance->name,
         ];
         if (!empty($this->groupid)) {
-            $filenameparts[] = format_string(groups_get_group_name($this->groupid), true, ['context' => $manager->get_context()]);
+            $filenameparts[] = groups_get_group_name($this->groupid);
+        }
+        foreach ($filenameparts as &$part) {
+            $part = format_string($part, true, ['context' => $manager->get_context()]);
         }
         $filenameparts[] = $manager->get_course_module()->id;
 
