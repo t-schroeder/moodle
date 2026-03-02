@@ -1274,7 +1274,7 @@ function question_default_export_filename($course, $category): string {
     $dateformat = str_replace(' ', '_', get_string('exportnameformat', 'question'));
     $timestamp = clean_filename(userdate(time(), $dateformat, 99, false));
 
-    $shortname = clean_filename($course->shortname);
+    $shortname = clean_filename(format_string($course->shortname));
     if ($shortname == '' || $shortname == '_' ) {
         $shortname = $course->id;
     }
