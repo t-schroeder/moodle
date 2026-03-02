@@ -1753,18 +1753,23 @@ EOF;
     }
 
     /**
-     * Given the text of a link, download the linked file and return the contents.
+     * Given the text of a link, download the linked file and return an object
+     * containing all information about the response.
      *
-     * A helper method used by the steps in {@see behat_download}, and the legacy
-     * {@see following_should_download_bytes()} and {@see following_should_download_between_and_bytes()}.
+     * A helper used by download_file_from_link() and
+     * download_file_get_default_name().
      *
      * @param string $link the text of the link.
      * @param string $containerlocator optional container element locator.
      * @param string $containertype optional container element selector type.
      *
-     * @return string the content of the downloaded file.
+     * @return stdClass response object.
      */
-    public function download_file_from_link(string $link, string $containerlocator = '', string $containertype = ''): string {
+    protected function download_file_from_link_fullresponse(
+        string $link,
+        string $containerlocator = '',
+        string $containertype = ''
+    ): object {
 
         // Find the link.
         if ($containerlocator !== '' && $containertype !== '') {
@@ -1792,7 +1797,24 @@ EOF;
 
         // Download the URL and check the size.
         $session = $this->getSession()->getCookie('MoodleSession');
-        return download_file_content($url, ['Cookie' => 'MoodleSession=' . $session]);
+        return download_file_content($url, ['Cookie' => 'MoodleSession=' . $session], null, true);
+    }
+
+    /**
+     * Given the text of a link, download the linked file and return the contents.
+     *
+     * A helper method used by the steps in {@see behat_download}, and the legacy
+     * {@see following_should_download_bytes()} and {@see following_should_download_between_and_bytes()}.
+     *
+     * @param string $link the text of the link.
+     * @param string $containerlocator optional container element locator.
+     * @param string $containertype optional container element selector type.
+     *
+     * @return string the content of the downloaded file.
+     */
+    public function download_file_from_link(string $link, string $containerlocator = '', string $containertype = ''): string {
+        $response = $this->download_file_from_link_fullresponse($link, $containerlocator, $containertype);
+        return $response->results;
     }
 
     /**
@@ -1879,6 +1901,50 @@ EOF;
                     ' bytes, expecting between ' . $minexpectedsize . ' and ' .
                     $maxexpectedsize, $this->getSession());
         }
+    }
+
+    /**
+     * Given the text of a link, download the linked file and return the contents.
+     *
+     * A helper method used by the steps in {@see behat_download}, and the legacy
+     * {@see following_should_download_bytes()} and {@see following_should_download_between_and_bytes()}.
+     *
+     * @param string $link the text of the link.
+     * @param string $containerlocator optional container element locator.
+     * @param string $containertype optional container element selector type.
+     *
+     * @return string the content of the downloaded file.
+     */
+    public function download_file_get_default_name(
+        string $link,
+        string $containerlocator = '',
+        string $containertype = ''
+    ): string {
+
+        // Parse the Content-Disposition header and extract the filename from it.
+        $response = $this->download_file_from_link_fullresponse($link, $containerlocator, $containertype);
+        foreach ($response->headers as $header) {
+            $header = trim($header);
+            if ($header == 'Content-Disposition: inline' || $header == 'Content-Disposition: attachment') {
+                // No default filename provided.
+                return '';
+            } else if (preg_match('/^Content-Disposition: attachment; filename="([^"]+)"$/', $header, $matches) === 1) {
+                return $matches[1];
+            } else if (preg_match('/^Content-Disposition: attachment; filename\\*=UTF-8\'\'(.+)$/', $header, $matches) === 1) {
+                return urldecode($matches[1]);
+            } else if (str_starts_with($header, 'Content-Disposition:')) {
+                throw new ExpectationException(
+                    'Content-Disposition header has unexpected format: ' . $header,
+                    $this->getSession()
+                );
+            }
+        }
+
+        // Didn't find Content-Disposition header.
+        throw new ExpectationException(
+            'Download HTTP response does not have Content-Disposition header.',
+            $this->getSession()
+        );
     }
 
     /**
